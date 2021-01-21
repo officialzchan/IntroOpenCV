@@ -56,10 +56,10 @@ cv2.createTrackbar("Val Min", "TrackBars", 0, 255, empty)
 cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
 '''
 cv2.createTrackbar("Hue Min", "TrackBars", 0, 179, empty)
-cv2.createTrackbar("Hue Max", "TrackBars", 19, 179, empty)
-cv2.createTrackbar("Sat Min", "TrackBars", 110, 255, empty)
-cv2.createTrackbar("Sat Max", "TrackBars", 240, 255, empty)
-cv2.createTrackbar("Val Min", "TrackBars", 153, 255, empty)
+cv2.createTrackbar("Hue Max", "TrackBars", 64, 179, empty)
+cv2.createTrackbar("Sat Min", "TrackBars", 17, 255, empty)
+cv2.createTrackbar("Sat Max", "TrackBars", 121, 255, empty)
+cv2.createTrackbar("Val Min", "TrackBars", 137, 255, empty)
 cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
 
 #img = cv2.imread(path)
@@ -82,12 +82,42 @@ while True:
     mask = cv2.inRange(imgHSV, lower, upper)
     imgResult = cv2.bitwise_and(img, img, mask = mask)
 
+    img2 = cv2.imread("C:/Users/Zac/Desktop/OpenCV/Images/beach.jpg")
+    img2HSV = cv2.cvtColor(img2, cv2.COLOR_BGR2HSV)
+    mask2 = cv2.inRange(img2HSV, lower, upper)
+    img2Result = cv2.bitwise_and(img2, img2, mask = mask2)
     '''
     cv2.imshow("Original", img)
     cv2.imshow("HSV", imgHSV)
     cv2.imshow("Mask", mask)
     cv2.imshow("Result Image", imgResult)
     '''
-    imgStack = stackImages(0.6, ([img, imgHSV], [mask, imgResult]))
+    imgStack = stackImages(0.6, ([img, imgHSV], [mask, imgResult], [img2, img2HSV], [mask2, img2Result]))
     cv2.imshow("Stacked Images", imgStack)
+
+    #img3 = cv2.add(imgResult, img2)
+
+    #img1 = cv2.imread('messi5.jpg')
+    #img2 = cv2.imread('opencv_logo.png')
+
+    # I want to put logo on top-left corner, So I create a ROI
+    rows,cols, = 480,640
+    roi = img2[0:rows, 0:cols ]
+
+    # Now create a mask of logo and create its inverse mask also
+    img2gray = cv2.cvtColor(imgResult,cv2.COLOR_BGR2GRAY)
+    ret, mask3 = cv2.threshold(img2gray, 10, 255, cv2.THRESH_BINARY)
+    mask_inv = cv2.bitwise_not(mask3)
+
+    # Now black-out the area of logo in ROI
+    img1_bg = cv2.bitwise_and(roi,roi,mask = mask_inv)
+
+    # Take only region of logo from logo image.
+    img2_fg = cv2.bitwise_and(imgResult,imgResult,mask = mask3)
+
+    # Put logo in ROI and modify the main image
+    dst = cv2.add(img1_bg,img2_fg)
+    img2[0:rows, 0:cols ] = dst
+
+    cv2.imshow("GreenSCreen?", img2)
     cv2.waitKey(1)
