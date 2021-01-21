@@ -35,9 +35,15 @@ def stackImages(scale,imgArray):
         ver = hor
     return ver
 
+#path = "C:/Users/Zac/Desktop/OpenCV/Images/Lambo.png"
+cap = cv2.VideoCapture(0)
+#Define width
+cap.set(3, 640)
+#Define height
+cap.set(4, 480)
+#change brightness
+cap.set(10, 200)
 
-
-path = "C:/Users/Zac/Desktop/OpenCV/Images/Lambo.png"
 
 cv2.namedWindow("TrackBars")
 cv2.resizeWindow("TrackBars", 640, 240)
@@ -56,13 +62,12 @@ cv2.createTrackbar("Sat Max", "TrackBars", 240, 255, empty)
 cv2.createTrackbar("Val Min", "TrackBars", 153, 255, empty)
 cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
 
-img = cv2.imread(path)
+#img = cv2.imread(path)
 
-imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+#imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 while True:
-    img = cv2.imread(path)
-
+    success, img = cap.read()
     imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h_min = cv2.getTrackbarPos("Hue Min", "TrackBars")
     h_max = cv2.getTrackbarPos("Hue Max", "TrackBars")
