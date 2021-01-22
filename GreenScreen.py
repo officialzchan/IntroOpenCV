@@ -56,14 +56,6 @@ cv2.createTrackbar("Val Max", "TrackBars", 255, 255, empty)
 
 
 videoBackground = cv2.VideoCapture("C:/Users/Zac/Desktop/OpenCV/Images/ConcertCrowdBackground.mp4")
-'''
-while True:
-    success, img = cap.read()
-    cv2.imshow("Video", img)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-'''
-
 while True:
     success, imgCamera = cap.read()
     imgCameraHSV = cv2.cvtColor(imgCamera, cv2.COLOR_BGR2HSV)
@@ -87,7 +79,6 @@ while True:
 
     success2, imgBackground = videoBackground.read()
     #imgBackground = cv2.imread("C:/Users/Zac/Desktop/OpenCV/Images/beach.jpg")
-    # I want to put logo on top-left corner, So I create a ROI
     #rows, cols, channels = imgBackground.shape
     #print(imgBackground.shape)
     rows,cols, = 480,640
